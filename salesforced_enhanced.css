@@ -1,0 +1,1240 @@
+/* ==UserStyle==
+@name           SalesFORCED Enhanced
+@namespace      github.com/hitek/salesforced-enhanced
+@version        0.1.0
+@description    Enhanced UI modifications for Salesforce Lightning with improved visual design, email differentiation, and modern typography
+@author         Eden Melgar
+@homepageURL    https://github.com/hitek/salesforced-enhanced
+@supportURL     https://github.com/hitek/salesforced-enhanced/issues
+@license        MIT
+
+@preprocessor stylus
+
+@var checkbox emailDiff     'Email differentiation badges' 1
+@var checkbox systemHidden  'Hide system update bodies' 0
+@var checkbox compactMode   'Compact system updates' 1
+@var checkbox typography    'Enhanced typography' 1
+@var checkbox animations    'Enable animations' 1
+==/UserStyle== */
+
+@-moz-document regexp("^https:\\/\\/.*\\.lightning\\.force\\.com\\/email\\/htmlbody.*$") {
+/* ==================== EMAIL COMPOSER ==================== */
+/* Larger Email Box with smooth transitions */
+  div#cke_1_contents.cke_contents { 
+    height: 505px !important;
+    transition: all 0.3s ease !important;
+  }
+  
+  iframe[title="CK Editor Container"] { 
+    height: 550px !important;
+    border-radius: 4px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+  }
+}
+
+@-moz-document regexp("^https:\\/\\/.*\\.lightning\\.force\\.com\\/lightning\\/r\\/Case.*$") {
+/* ==================== CASE VIEW COLUMNS ==================== */
+
+
+  /* Optimized column layout with smoother proportions */
+  #leftColumn-57, [id^="leftColumn-"], .col.left-col.slds-col { 
+    flex: 0 0 18% !important;
+    transition: flex 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+  
+  #middleColumn-57, [id^="middleColumn-"], .col.main-col.slds-col { 
+    flex: 1 0 64% !important;
+    padding: 0 1rem !important;
+    transition: flex 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+  
+  #rightColumn-57, [id^="rightColumn-"], .col.right-col.slds-col { 
+    flex: 0 0 18% !important;
+    transition: flex 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+  
+  
+  /* Tooltip for collapsed state */
+  .sf-collapsed .sf-toggle-btn::after {
+    content: "Expand sidebar" !important;
+    position: absolute !important;
+    left: 40px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    background: rgba(0, 0, 0, 0.85) !important;
+    color: #fff !important;
+    padding: 6px 12px !important;
+    border-radius: 4px !important;
+    font-size: 12px !important;
+    white-space: nowrap !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity 0.2s ease !important;
+    z-index: 10001 !important;
+  }
+  
+  .sf-collapsed .sf-toggle-btn:hover::after {
+    opacity: 1 !important;
+  }
+  /* ==================== EMAIL RESPONSE DIFFERENTIATION ==================== */
+  if emailDiff {
+   .slds-tabs_card, .slds-tabs_card.slds-tabs_card {
+     padding: 0;
+   }
+  
+  /* CUSTOMER Email Messages (From Customer to Support) - Green theme with badge */
+  [data-type="EmailMessageEvent"]:has(img[src*="eventcustomer"]) {
+    
+    border-left: 4px solid #388E3C !important;
+    box-shadow: 0 2px 6px rgba(56, 142, 60, 0.25) !important;
+    position: relative !important;
+  }
+  
+  [data-type="EmailMessageEvent"]:has(img[src*="eventcustomer"])::after {
+    content: "CUSTOMER" !important;
+    position: absolute !important;
+    top: -1px !important;
+    right: 0px !important;
+    background: #388E3C !important;
+    color: white !important;
+    padding: 2px 8px !important;
+    font-size: 9px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+    z-index: 10 !important;
+    
+  }
+  
+  /* SUPPORT Email Messages (From Support to Customer) - Blue theme with badge */
+  [data-type="EmailMessageEvent"]:has(img[src*="lightning_blue_profile_avatar"]):not(:has(img[src*="eventcustomer"])):not(:has(img[src*="eventinternal"])):not(:has(img[src*="eventsupport"])) {
+    border-left: 4px solid #1976D2 !important;
+    position: relative !important;
+  }
+  
+  [data-type="EmailMessageEvent"]:has(img[src*="lightning_blue_profile_avatar"]):not(:has(img[src*="eventcustomer"])):not(:has(img[src*="eventinternal"])):not(:has(img[src*="eventsupport"]))::after {
+    content: "SUPPORT" !important;
+    position: absolute !important;
+    top: -1px !important;
+    right: 0px !important;
+    background: #1976D2 !important;
+    color: white !important;
+    padding: 2px 8px !important;
+    font-size: 9px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+    z-index: 10 !important;
+   
+  }
+  
+  /* INTERNAL Email Messages (Support to Support) - Amber theme with badge */
+  [data-type="EmailMessageEvent"]:has(img[src*="eventinternal"]),
+  [data-type="EmailMessageEvent"]:has(img[src*="eventsupport"]) {
+    background: linear-gradient(to bottom, #1976D2, #0D47A1) !important;
+   
+    position: relative !important;
+  }
+  
+  [data-type="EmailMessageEvent"]:has(img[src*="eventinternal"])::after,
+  [data-type="EmailMessageEvent"]:has(img[src*="eventsupport"])::after {
+    content: "INTERNAL" !important;
+    position: absolute !important;
+    top: 0px !important;
+    right: 0px !important;
+    background: #1976D2  !important;
+    color: white !important;
+    padding: 2px 8px !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+    z-index: 10 !important;
+    
+  }
+  
+  /* Override for CSOC and other Support teams using eventcustomer avatar - Blue theme */
+  [data-type="EmailMessageEvent"]:has(img[src*="eventcustomer"][alt*="Support"]),
+  [data-type="EmailMessageEvent"]:has(img[src*="eventcustomer"][title*="Support"]),
+  [data-type="EmailMessageEvent"]:has(img[src*="eventcustomer"][alt*="CSOC"]),
+  [data-type="EmailMessageEvent"]:has(img[src*="eventcustomer"][title*="CSOC"]) {
+    
+    border-left: 4px solid #1976D2 !important;
+    box-shadow: 0 2px 6px rgba(25, 118, 210, 0.25) !important;
+  }
+  
+  [data-type="EmailMessageEvent"]:has(img[src*="eventcustomer"][alt*="Support"])::after,
+  [data-type="EmailMessageEvent"]:has(img[src*="eventcustomer"][title*="Support"])::after,
+  [data-type="EmailMessageEvent"]:has(img[src*="eventcustomer"][alt*="CSOC"])::after,
+  [data-type="EmailMessageEvent"]:has(img[src*="eventcustomer"][title*="CSOC"])::after {
+    content: "SUPPORT" !important;
+    background: #1976D2 !important;
+  }
+  }
+}
+
+@-moz-document regexp("^https:\\/\\/.*\\.lightning\\.force\\.com\\/lightning\\/r\\/Case.*$") {
+/* ==================== ENHANCED FEED STYLING (CLEAN BACKGROUND) ==================== */
+   /* Override Salesforce CSS variables that control blue backgrounds */
+  /* Override Salesforce CSS variables that control blue backgrounds */
+  :root, html {
+    /* Neutralize brand/blue color variables */
+    --sds-g-color-palette-blue-10: transparent !important;
+    --sds-g-color-palette-blue-15: transparent !important;
+    --sds-g-color-palette-blue-20: transparent !important;
+    --sds-g-color-palette-blue-30: transparent !important;
+    --sds-g-color-palette-cloud-blue-10: transparent !important;
+    --sds-g-color-palette-cloud-blue-15: transparent !important;
+    --sds-g-color-palette-cloud-blue-20: transparent !important;
+    --sds-g-color-palette-cloud-blue-30: transparent !important;
+    
+    /* Override brand base colors that affect backgrounds */
+    --sds-g-color-brand-base-10: transparent !important;
+    --sds-g-color-brand-base-15: transparent !important;
+    --sds-g-color-brand-base-20: transparent !important;
+    
+    /* Override LWC brand background variables */
+    --lwc-brandBackgroundDarkTransparent: transparent !important;
+    --lwc-brandBackgroundDark: transparent !important;
+    --lwc-brandContrast: rgba(240, 240, 240, 1) !important;
+    
+    /* Override LWC palette blue variables */
+    --lwc-paletteCloudBlue10: transparent !important;
+    --lwc-paletteCloudBlue15: transparent !important;
+    --lwc-paletteCloudBlue20: transparent !important;
+    --lwc-paletteCloudBlue30: transparent !important;
+    --lwc-paletteCloudBlue40: transparent !important;
+    --lwc-paletteBlue10: transparent !important;
+    --lwc-paletteBlue15: transparent !important;
+    --lwc-paletteBlue20: transparent !important;
+    --lwc-paletteBlue30: transparent !important;
+    --lwc-paletteBlue40: transparent !important;
+  }
+  .forceChatterFeedCommentInputDesktop .cuf-submit .cuf-commentSubmit:disabled{
+    color: white!important;
+  }
+  
+   :root, html, .slds-brand-band, .slds-brand-band:before {
+    background-image: none!important;
+   }
+   
+   
+   /* Remove background from comment area */ 
+   .slds-feed__item-comments {
+    border: none;
+   }
+   .slds-feed__item-comments {
+    background: transparent !important;
+   }
+   .forceChatterFeedback--default .commentInputArea {
+    margin-top: 0px!important;
+   }
+   .supportCompactFeedItem .cuf-compactFeedBack .cuf-feedback {
+    margin-top: 0px!important;
+    margin-bottom: 0px;
+   }
+  
+  /* Base feed item styling */
+  [data-type="TextPost"],
+  [data-type="LinkPost"],
+  article.cuf-clumpItem,
+  [data-type="TrackedChange"], 
+  [data-type="ChangeStatusPost"],
+  [data-type="CaseCreation"],
+  [data-type="CaseCommentPost"],
+  [data-type="CreateRecordEvent"] {
+    border-radius: 0px !important;
+    margin-bottom: 0 !important;
+    transition: all 0.2s ease !important;
+    position: relative !important;
+    overflow: hidden !important;
+  }
+  
+  
+  
+  /* Internal Posts - Amber/Gold theme */
+  [data-type="TextPost"],
+  [data-type="LinkPost"] {
+    background: linear-gradient(to right, rgba(255, 193, 7, 0.12) 0%, rgba(255, 193, 7, 0.04) 100%) !important;
+    border-left: 2px solid #FFA000 !important;
+  
+  }
+  
+  
+  
+  /* User Comments - Warmer theme */
+  [data-type="CaseCommentPost"]{
+    background: linear-gradient(to right, rgba(255, 193, 7, 0.12) 0%, rgba(255, 193, 7, 0.04) 100%) !important;
+    border-left: 4px solid #FFA000 !important;
+  }
+  
+  feedActions.slds-grid.slds-grid_vertical-align-end.slds-grid_align-spread.slds-p-around_small.qe-feedPanelFeedActions {
+    display: none;
+  }
+  .cuf-feedback.slds-feed__item-comments.has-comments.forceChatterFeedback--default.forceChatterFeedback {
+    background: linear-gradient(to right, rgba(255, 193, 7, 0.12) 0%, rgba(255, 193, 7, 0.04) 100%) !important;
+    border-left: 14px solid #FFA000 !important;
+    margin-left: 0;
+    margin-bottom: 0;
+    margin-right: 0;
+    padding-right: 0;
+  }
+  
+  .supportCompactFeedItem .forceChatterFeedAuxBody, .supportCompactFeedItem .cuf-body, .supportCompactFeedItem .supportCompactFeedItemFooter, .supportCompactFeedItem .interactions {
+    margin-left: 1rem;
+    }
+  
+  /* System Updates - Blue/Info theme */
+  article.cuf-clumpItem,
+  [data-type="TrackedChange"], 
+  [data-type="ChangeStatusPost"],
+  [data-type="CaseCreation"],
+  [data-type="CreateRecordEvent"] {
+    background: linear-gradient(to right, rgba(33, 150, 243, 0.08) 0%, rgba(33, 150, 243, 0.02) 100%) !important;
+    border-left: 2px solid #1976D2 !important;
+  }
+
+  /* Hide the ticket update body */
+  if systemHidden {
+  /* Keep body hidden when slds-hide is applied */
+  [data-type="ChangeStatusPost"] .slds-var-m-top_medium.cuf-compactBody,
+  [data-type="CreateRecordEvent"] .slds-var-m-top_medium.cuf-compactBody,
+  [data-type="TrackedChange"] .slds-var-m-top_medium.cuf-compactBody,
+  [data-type="CaseCreation"] .slds-var-m-top_medium.cuf-compactBody,
+  article.cuf-clumpItem .slds-var-m-top_medium {
+    display: none !important;
+  }
+  
+  /* Hide entire interactions section (Comment/More buttons) */
+  [data-type="ChangeStatusPost"] .interactions,
+  [data-type="ChangeStatusPost"] ~ .interactions,
+  [data-type="CreateRecordEvent"] .interactions,
+  [data-type="CreateRecordEvent"] ~ .interactions,
+  [data-type="TrackedChange"] .interactions,
+  [data-type="TrackedChange"] ~ .interactions,
+  [data-type="CaseCreation"] .interactions,
+  [data-type="CaseCreation"] ~ .interactions {
+    display: none !important;
+  }
+  
+  /* Hide comment input and feedback areas */
+  [data-type="ChangeStatusPost"] ~ .cuf-compactFeedBack,
+  .cuf-element:has([data-type="ChangeStatusPost"]) .cuf-compactFeedBack,
+  .cuf-element:has([data-type="ChangeStatusPost"]) .commentInputArea,
+  .cuf-element:has([data-type="ChangeStatusPost"]) .cuf-feedback,
+  [data-type="CreateRecordEvent"] ~ .cuf-compactFeedBack,
+  .cuf-element:has([data-type="CreateRecordEvent"]) .cuf-compactFeedBack,
+  .cuf-element:has([data-type="CreateRecordEvent"]) .commentInputArea,
+  .cuf-element:has([data-type="CreateRecordEvent"]) .cuf-feedback,
+  [data-type="TrackedChange"] ~ .cuf-compactFeedBack,
+  .cuf-element:has([data-type="TrackedChange"]) .cuf-compactFeedBack,
+  .cuf-element:has([data-type="TrackedChange"]) .commentInputArea,
+  .cuf-element:has([data-type="TrackedChange"]) .cuf-feedback,
+  [data-type="CaseCreation"] ~ .cuf-compactFeedBack,
+  .cuf-element:has([data-type="CaseCreation"]) .cuf-compactFeedBack,
+  .cuf-element:has([data-type="CaseCreation"]) .commentInputArea,
+  .cuf-element:has([data-type="CaseCreation"]) .cuf-feedback {
+    display: none !important;
+  }
+  
+  /* Rotate chevron to point right when collapsed */
+    .cuf-feedItemHeader a[aria-expanded="true"] .chevron-icon svg {
+      transform: rotate(-90deg) !important;
+    }
+
+    /* Update assistive text */
+    .cuf-feedItemHeader a[aria-expanded="true"] .slds-assistive-text {
+      display: none !important;
+    }
+  }  
+  
+  slot.slds-card__body {
+    margin-bottom: 0px;
+  }
+  /* Minimal styling for system updates - compact display */
+  if compactMode {
+    [data-type="ChangeStatusPost"],
+    [data-type="CreateRecordEvent"],
+    [data-type="TrackedChange"],
+    [data-type="CaseCreation"],
+    article.cuf-clumpItem {
+      padding: 0.3rem 1.4rem !important;
+      margin-bottom: 0rem !important;
+      min-height: auto !important;
+    }
+  }
+  
+  /* Compact header spacing */
+  [data-type="ChangeStatusPost"] .cuf-feedItemHeader,
+  [data-type="CreateRecordEvent"] .cuf-feedItemHeader,
+  [data-type="TrackedChange"] .cuf-feedItemHeader,
+  [data-type="CaseCreation"] .cuf-feedItemHeader,
+  article.cuf-clumpItem .cuf-feedItemHeader {
+    margin-bottom: 0.25rem !important;
+  }
+  
+  /* Reduce padding in grids */
+  [data-type="ChangeStatusPost"] .slds-grid,
+  [data-type="CreateRecordEvent"] .slds-grid,
+  [data-type="TrackedChange"] .slds-grid,
+  [data-type="CaseCreation"] .slds-grid {
+    padding: 0 !important;
+    margin-top: 0 !important;
+  }
+  
+  [data-type="ChangeStatusPost"] .cuf-compactBody,
+  [data-type="CreateRecordEvent"] .cuf-compactBody,
+  [data-type="TrackedChange"] .cuf-compactBody,
+  [data-type="CaseCreation"] .cuf-compactBody {
+    margin-top: 0.5rem !important;
+  }
+  
+  /* Smaller avatars */
+  [data-type="ChangeStatusPost"] .entity-photo,
+  [data-type="ChangeStatusPost"] img[alt],
+  [data-type="CreateRecordEvent"] .entity-photo,
+  [data-type="CreateRecordEvent"] img[alt],
+  [data-type="TrackedChange"] .entity-photo,
+  [data-type="TrackedChange"] img[alt],
+  [data-type="CaseCreation"] .entity-photo,
+  [data-type="CaseCreation"] img[alt],
+  [data-type="ChangeStatusPost"] .forceEntityIcon,
+  [data-type="CreateRecordEvent"] .forceEntityIcon,
+  [data-type="TrackedChange"] .forceEntityIcon,
+  [data-type="CaseCreation"] .forceEntityIcon {
+    width: 28px !important;
+    height: 28px !important;
+  }
+  
+  /* Compact text */
+  [data-type="ChangeStatusPost"] .cuf-body,
+  [data-type="ChangeStatusPost"] .cuf-ftcList,
+  [data-type="CreateRecordEvent"] .cuf-body,
+  [data-type="CreateRecordEvent"] .cuf-ftcList,
+  [data-type="TrackedChange"] .cuf-body,
+  [data-type="TrackedChange"] .cuf-ftcList,
+  [data-type="CaseCreation"] .cuf-body,
+  [data-type="CaseCreation"] .cuf-ftcList {
+    font-size: 13px !important;
+    line-height: 1.4 !important;
+  }
+  
+  /* Smaller field labels */
+  [data-type="ChangeStatusPost"] .cuf-ftcFieldLabel,
+  [data-type="ChangeStatusPost"] .cuf-rsFieldLabel,
+  [data-type="CreateRecordEvent"] .cuf-ftcFieldLabel,
+  [data-type="CreateRecordEvent"] .cuf-rsFieldLabel,
+  [data-type="TrackedChange"] .cuf-ftcFieldLabel,
+  [data-type="TrackedChange"] .cuf-rsFieldLabel,
+  [data-type="CaseCreation"] .cuf-ftcFieldLabel,
+  [data-type="CaseCreation"] .cuf-rsFieldLabel {
+    font-size: 12px !important;
+    font-weight: 500 !important;
+  }
+  
+  /* Compact timestamp */
+  [data-type="ChangeStatusPost"] .compactTimeStamp,
+  [data-type="CreateRecordEvent"] .compactTimeStamp,
+  [data-type="TrackedChange"] .compactTimeStamp,
+  [data-type="CaseCreation"] .compactTimeStamp,
+  article.cuf-clumpItem .compactTimeStamp {
+    font-size: 11px !important;
+  }
+  
+  /* Reduce icon size */
+  [data-type="ChangeStatusPost"] .preamble__icon,
+  [data-type="CreateRecordEvent"] .preamble__icon,
+  [data-type="TrackedChange"] .preamble__icon,
+  [data-type="CaseCreation"] .preamble__icon {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  
+  /* Reduce icon in CreateRecordEvent */
+  [data-type="CreateRecordEvent"] .slds-icon_x-small {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  
+  /* Accent bar for visual interest */
+  [data-type="TextPost"]::before,
+  [data-type="LinkPost"]::before,
+  [data-type="CaseCommentPost"]::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, #FFA000, #FF6F00) !important;
+    z-index: 1;
+  }
+  
+  article.cuf-clumpItem::before,
+  [data-type="TrackedChange"]::before, 
+  [data-type="ChangeStatusPost"]::before,
+  [data-type="CaseCreation"]::before,
+  [data-type="CreateRecordEvent"]::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, #1976D2, #0D47A1) !important;
+    z-index: 1;
+  }
+  
+  /* Zendesk-style avatars - circular and clean */
+  [data-type="TextPost"] .entity-photo,
+  [data-type="LinkPost"] .entity-photo,
+  [data-type="CaseCommentPost"] .entity-photo,
+  [data-type="TextPost"] img[alt],
+  [data-type="LinkPost"] img[alt],
+  [data-type="CaseCommentPost"] img[alt] {
+    border-radius: 50% !important;
+    border: 2px solid #f8f9f9 !important;
+    width: 32px !important;
+    height: 32px !important;
+  }
+  
+  
+  
+  
+  /* Timestamps - subtle gray like Zendesk */
+  [data-type="TextPost"] .compactTimeStamp,
+  [data-type="LinkPost"] .compactTimeStamp,
+  [data-type="CaseCommentPost"] .compactTimeStamp {
+    color: #68737d !important;
+    font-size: 12px !important;
+    font-weight: 400 !important;
+  }
+  
+  /* Message content - clean and readable */
+  [data-type="TextPost"] .cuf-body,
+  [data-type="LinkPost"] .cuf-body,
+  [data-type="CaseCommentPost"] .cuf-body {
+    color: #2f3941 !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    padding: 0.5rem 0 !important;
+  }
+  
+  /* Preserve child element backgrounds */
+  [data-type="LinkPost"] .slds-size_1-of-1,
+  [data-type="LinkPost"] .slds-grid,
+  [data-type="LinkPost"] ~ .commentInputArea,
+  [data-type="TextPost"] .slds-size_1-of-1,
+  [data-type="TextPost"] .slds-grid,
+  [data-type="TextPost"] ~ .commentInputArea,
+  [data-type="TrackedChange"] .slds-size_1-of-1,
+  [data-type="TrackedChange"] .slds-grid,
+  [data-type="TrackedChange"] ~ .commentInputArea,
+  [data-type="ChangeStatusPost"] .slds-size_1-of-1,
+  [data-type="ChangeStatusPost"] .slds-grid,
+  [data-type="ChangeStatusPost"] ~ .commentInputArea,
+  [data-type="CaseCreation"] .slds-size_1-of-1,
+  [data-type="CaseCreation"] .slds-grid,
+  [data-type="CaseCreation"] ~ .commentInputArea,
+  [data-type="CaseCommentPost"] .slds-size_1-of-1,
+  [data-type="CaseCommentPost"] .slds-grid,
+  [data-type="CaseCommentPost"] ~ .commentInputArea,
+  [data-type="CreateRecordEvent"] .slds-size_1-of-1,
+  [data-type="CreateRecordEvent"] .slds-grid,
+  [data-type="CreateRecordEvent"] ~ .commentInputArea,
+  article.cuf-clumpItem .slds-grid,
+  article.cuf-clumpItem .cuf-ftcLink {
+    background-color: transparent !important;
+  }
+  
+  /* Enhanced typography for feed items */
+  [data-type="TextPost"] .content,
+  [data-type="LinkPost"] .content,
+  article.cuf-clumpItem .content {
+    line-height: 1.6 !important;
+    padding: 0.5rem !important;
+  }
+  
+  /* ==================== COMMENT & MESSAGE AREA STYLING ==================== */
+  
+  /* Comment input container styling */
+  .commentInputArea {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+    margin-top: 0.75rem !important;
+  }
+  
+  /* Rich text editor styling */
+  .commentInputArea .ql-editor,
+  .commentInputArea .slds-rich-text-area__content {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    color: #2f3941 !important;
+    padding: 0.75rem !important;
+    min-height: 80px !important;
+  }
+  
+  /* Placeholder text */
+  .commentInputArea .ql-editor.ql-blank::before {
+    color: #68737d !important;
+    font-style: normal !important;
+  }
+  
+  /* Toolbar styling */
+  .commentInputArea .slds-rich-text-editor__toolbar {
+    border-top: 1px solid #e0e5e8 !important;
+    padding: 0.5rem !important;
+    background: #f8f9fa !important;
+  }
+  
+  /* Toolbar buttons */
+  .commentInputArea .slds-button_icon-border-filled {
+    background: transparent !important;
+    border-color: transparent !important;
+  }
+  
+  .commentInputArea .slds-button_icon-border-filled:hover {
+    background: #e0e5e8 !important;
+    border-color: #cbd2d9 !important;
+  }
+  
+  /* Comment submit button */
+  .cuf-submit .slds-button_brand {
+
+    font-weight: 500 !important;
+  }
+  
+  .cuf-submit .slds-button_brand:hover {
+    background: #1565C0 !important;
+  }
+  
+  /* Comment feedback area (existing comments) */
+  .cuf-feedback {
+    margin-top: 0.5rem !important;
+  }
+  
+  /* Individual comment styling */
+  .cuf-feedback .cuf-body,
+  .cuf-feedback .forceChatterCommentBody {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    color: #2f3941 !important;
+    padding: 0.5rem 0 !important;
+  }
+  
+  /* Comment metadata (author, timestamp) */
+  .cuf-feedback .cuf-feedItemHeader,
+  .cuf-feedback .forceChatterCommentHeader {
+    margin-bottom: 0.25rem !important;
+  }
+  
+  .cuf-feedback .compactTimeStamp {
+    color: #68737d !important;
+    font-size: 12px !important;
+  }
+  
+  /* Status change details in case updates */
+  .supportCompactFeedItemFieldChangeContent .cuf-ftcList {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+    color: #2f3941 !important;
+  }
+  
+  .supportCompactFeedItemFieldChangeContent .cuf-ftcFieldLabel {
+    font-weight: 600 !important;
+    color: #68737d !important;
+  }
+  
+  .supportCompactFeedItemFieldChangeContent .cuf-ftcFieldOldValue,
+  .supportCompactFeedItemFieldChangeContent .cuf-ftcFieldNewValue {
+    font-weight: 500 !important;
+  }
+  
+  /* ==================== COMMENT AREA BACKGROUNDS BY POST TYPE ==================== */
+  
+  /* Comment areas for Internal Posts (TextPost, LinkPost) - Amber/Gold theme */
+  [data-type="TextPost"] ~ .cuf-compactFeedBack,
+  [data-type="LinkPost"] ~ .cuf-compactFeedBack,
+  .cuf-element:has([data-type="TextPost"]) .cuf-compactFeedBack,
+  .cuf-element:has([data-type="LinkPost"]) .cuf-compactFeedBack {
+    background: linear-gradient(to right, rgba(255, 193, 7, 0.08) 0%, rgba(255, 193, 7, 0.02) 100%) !important;
+    /* border-left: 14px solid #FFA000 !important; */
+    /* padding: 0.75rem !important; */
+    margin-left: 0 !important;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  
+  /* Comment areas for User Comments (CaseCommentPost) - Amber/Gold theme */
+  [data-type="CaseCommentPost"] ~ .cuf-compactFeedBack,
+  .cuf-element:has([data-type="CaseCommentPost"]) .cuf-compactFeedBack,
+  .cuf-element:has([data-type="CaseCommentPost"]) .commentInputArea {
+    background: transparent !important;
+    /* border-left: 14px solid #FFA000 !important; */
+    /* padding: 0.75rem !important; */
+    margin-left: 0 !important;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  
+  /* Comment areas for System Updates (Case Updates) - Blue theme */
+  [data-type="ChangeStatusPost"] ~ .cuf-compactFeedBack,
+  [data-type="CreateRecordEvent"] ~ .cuf-compactFeedBack,
+  [data-type="TrackedChange"] ~ .cuf-compactFeedBack,
+  [data-type="CaseCreation"] ~ .cuf-compactFeedBack,
+  article.cuf-clumpItem ~ .cuf-compactFeedBack,
+  .cuf-element:has([data-type="ChangeStatusPost"]) .cuf-compactFeedBack,
+  .cuf-element:has([data-type="CreateRecordEvent"]) .cuf-compactFeedBack,
+  .cuf-element:has([data-type="TrackedChange"]) .cuf-compactFeedBack,
+  .cuf-element:has([data-type="CaseCreation"]) .cuf-compactFeedBack,
+  .cuf-element:has(article.cuf-clumpItem) .cuf-compactFeedBack{
+    background: linear-gradient(to right, rgba(33, 150, 243, 0.08) 0%, rgba(33, 150, 243, 0.02) 100%) !important;
+    /* padding: 0.75rem !important; */
+    margin-left: 0 !important;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  
+  /* Rich text editor background within comment areas */
+  .commentInputArea .slds-rich-text-editor__textarea,
+  .commentInputArea .ql-container {
+    /* background: rgba(255, 255, 255, 0.7) !important; */
+  }
+}
+
+@-moz-document regexp("^https:\\/\\/.*\\.lightning\\.force\\.com\\/lightning\\/o\\/Case.*$") {
+/* ==================== ENHANCED CASE LIST ==================== */
+
+
+  
+  /* Zebra striping with subtle gradient */
+  tr:nth-child(odd) {
+    background: linear-gradient(to right, rgba(248, 249, 250, 0.5) 0%, rgba(248, 249, 250, 0.3) 100%) !important;
+  }
+  
+  tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+  }
+  
+  /* Row hover effect */
+  tr:hover {
+    background: linear-gradient(to right, rgba(33, 150, 243, 0.08) 0%, rgba(33, 150, 243, 0.04) 100%) !important;
+    transform: scale(1.002) !important;
+    transition: all 0.2s ease !important;
+    /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important; */
+  }
+  
+  /* Status cell base styling */
+  td[data-label="Status"] {
+    position: relative !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease !important;
+  }
+  
+  /* Status indicators with refined colors and gradients */
+  
+  /* Status animations */
+  if animations {
+  /* Escalated - Red with urgency */
+  td[data-label="Status"]:has(span[title*="Escalated"])::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to right, rgba(244, 67, 54, 0.2) 0%, rgba(244, 67, 54, 0.1) 100%) !important;
+    border-left: 2px solid #D32F2F !important;
+    z-index: 0;
+    pointer-events: none;
+  }
+  
+  td[data-label="Status"]:has(span[title*="Escalated"]) {
+    animation: pulse-red 2s ease-in-out infinite !important;
+  }
+  
+  /* On Hold - Teal/Cyan */
+  td[data-label="Status"]:has(span[title*="On Hold"])::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to right, rgba(0, 188, 212, 0.15) 0%, rgba(0, 188, 212, 0.05) 100%) !important;
+    border-left: 2px solid #00838F !important;
+    z-index: 0;
+    pointer-events: none;
+  }
+  
+  /* In Progress - Amber/Orange */
+  td[data-label="Status"]:has(span[title*="In Progress"])::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to right, rgba(255, 160, 0, 0.15) 0%, rgba(255, 160, 0, 0.05) 100%) !important;
+    border-left: 2px solid #F57C00 !important;
+    z-index: 0;
+    pointer-events: none;
+  }
+  
+  /* New - Green with freshness indicator */
+  td[data-label="Status"]:has(span[title*="New"])::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to right, rgba(76, 175, 80, 0.18) 0%, rgba(76, 175, 80, 0.08) 100%) !important;
+    border-left: 2px solid #388E3C !important;
+    z-index: 0;
+    pointer-events: none;
+  }
+  
+  td[data-label="Status"]:has(span[title*="New"]) {
+    animation: pulse-green 3s ease-in-out infinite !important;
+  }
+  
+  /* Snoozed - Purple/Indigo */
+  td[data-label="Status"]:has(span[title*="Snoozed"])::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to right, rgba(156, 39, 176, 0.12) 0%, rgba(156, 39, 176, 0.04) 100%) !important;
+    border-left: 2px solid #7B1FA2 !important;
+    z-index: 0;
+    pointer-events: none;
+  }
+  
+  /* Customer Replied - Deep Orange */
+  td[data-label="Status"]:has(span[title*="Customer Replied"])::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to right, rgba(255, 87, 34, 0.18) 0%, rgba(255, 87, 34, 0.08) 100%) !important;
+    border-left: 2px solid #E64A19 !important;
+    z-index: 0;
+    pointer-events: none;
+  }
+  
+  td[data-label="Status"]:has(span[title*="Customer Replied"]) {
+    animation: pulse-orange 2.5s ease-in-out infinite !important;
+  }
+  }
+  
+  /* Ensure proper stacking for status text */
+  td[data-label="Status"] span {
+    position: relative !important;
+    z-index: 1 !important;
+  }
+  
+  /* Override Dark Reader for consistent rendering */
+  tr .slds-grid,
+  tr:nth-child(odd) .slds-grid,
+  tr:nth-child(even) .slds-grid {
+    background-color: transparent !important;
+  }
+  
+  /* Table header enhancements */
+  thead th {
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    font-size: 0.75rem !important;
+    letter-spacing: 0.5px !important;
+    color: rgba(0, 0, 0, 0.7) !important;
+    border-bottom: 2px solid rgba(33, 150, 243, 0.3) !important;
+  }
+  
+  /* Cell padding improvements */
+  td {
+    padding: 0.75rem 0.5rem !important;
+  }
+}
+
+/* ==================== ANIMATIONS ==================== */
+if animations {
+@keyframes pulse-red {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(244, 67, 54, 0);
+  }
+  50% {
+    box-shadow: 0 0 8px 2px rgba(244, 67, 54, 0.4);
+  }
+}
+
+@keyframes pulse-green {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+  }
+  50% {
+    box-shadow: 0 0 6px 1px rgba(76, 175, 80, 0.3);
+  }
+}
+
+@keyframes pulse-orange {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 87, 34, 0);
+  }
+  50% {
+    box-shadow: 0 0 8px 2px rgba(255, 87, 34, 0.4);
+  }
+}
+}
+
+@-moz-document regexp("^https:\\/\\/.*\\.lightning\\.force\\.com\\/.*$") {
+/* ==================== TYPOGRAPHY ENHANCEMENTS ==================== */
+    .feedActions.slds-grid.slds-grid_vertical-align-end.slds-grid_align-spread.slds-p-around_small.qe-feedPanelFeedActions {
+    display: none;
+  }
+  if typography {
+  /* Modern font stack with excellent readability */
+  body, 
+  .slds-text-body_regular,
+  .slds-text-body_small,
+  .slds-textarea,
+  .slds-input,
+  p, 
+  div, 
+  span {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+  }
+  
+  /* Email message body - Enhanced readability */
+  .cuf-body,
+  .feeditemtext,
+  [class*="emailBody"],
+  [class*="messageBody"],
+  .slds-rich-text-editor__output,
+  .emailuiEmailBodyComponent,
+  div[class*="emailBody"],
+  .email-body,
+  [data-aura-class*="emailBody"] {
+    font-size: 15px !important;
+    line-height: 1.7 !important;
+    color: #2c3e50 !important;
+    font-weight: 400 !important;
+    letter-spacing: 0.01em !important;
+  }
+  
+  /* Email body paragraphs */
+  .cuf-body p,
+  .feeditemtext p,
+  [class*="emailBody"] p,
+  .slds-rich-text-editor__output p {
+    margin-bottom: 1em !important;
+    line-height: 1.7 !important;
+  }
+  
+  /* Headers in email and feed */
+  .cuf-body h1, [class*="emailBody"] h1 {
+    font-size: 1em !important;
+    font-weight: 600 !important;
+    margin-bottom: 0.5em !important;
+    color: #1a1a1a !important;
+    letter-spacing: -0.02em !important;
+  }
+  
+  .cuf-body h2, [class*="emailBody"] h2 {
+    font-size: 1.5em !important;
+    font-weight: 600 !important;
+    margin-bottom: 0.5em !important;
+    color: #1a1a1a !important;
+    letter-spacing: -0.01em !important;
+  }
+  
+  .cuf-body h3, [class*="emailBody"] h3 {
+    font-size: 1.25em !important;
+    font-weight: 600 !important;
+    margin-bottom: 0.5em !important;
+    color: #333 !important;
+  }
+  
+  /* Lists in email bodies */
+  .cuf-body ul, 
+  .cuf-body ol,
+  [class*="emailBody"] ul,
+  [class*="emailBody"] ol {
+    margin: 0.75em 0 !important;
+    padding-left: 1.5em !important;
+  }
+  
+  .cuf-body li,
+  [class*="emailBody"] li {
+    margin-bottom: 0.4em !important;
+    line-height: 1.6 !important;
+  }
+  
+  /* Code blocks in emails */
+  /* Inline code - clean text editor style */
+  .cuf-body code,
+  [class*="emailBody"] code,
+  .feeditemtext code,
+  .slds-rich-text-editor__output code {
+    font-family: "JetBrains Mono", "Fira Code", "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace !important;
+    font-size: 0.92em !important;
+    background: #f5f5f5 !important;
+    color: #383a42 !important;
+    padding: 0.2em 0.5em !important;
+    border-radius: 3px !important;
+    border: 1px solid #e0e0e0 !important;
+    font-weight: 400 !important;
+    white-space: nowrap !important;
+  }
+  
+  /* Block code - clean light text editor style */
+  .cuf-body pre,
+  [class*="emailBody"] pre,
+  .feeditemtext pre,
+  .slds-rich-text-editor__output pre {
+    font-family: "JetBrains Mono", "Fira Code", "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace !important;
+    font-size: 0.9em !important;
+    background: #fafafa !important;
+    border: 1px solid #e1e4e8 !important;
+    border-radius: 6px !important;
+    padding: 1em 1.25em !important;
+    overflow-x: auto !important;
+    line-height: 1.6 !important;
+    margin: 1em 0 !important;
+    position: relative !important;
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+  }
+  
+  /* Allow syntax highlighting colors and text wrapping */
+  .cuf-body pre code,
+  [class*="emailBody"] pre code,
+  .feeditemtext pre code,
+  .slds-rich-text-editor__output pre code {
+    color: #24292e !important;
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+  }
+  
+  /* VCL syntax highlighting colors */
+  .vcl-keyword {
+    color: #d73a49 !important;
+    font-weight: 600 !important;
+  }
+  
+  .vcl-string {
+    color: #032f62 !important;
+  }
+  
+  .vcl-comment {
+    color: #6a737d !important;
+    font-style: italic !important;
+  }
+  
+  .vcl-function {
+    color: #6f42c1 !important;
+    font-weight: 500 !important;
+  }
+  
+  .vcl-builtin {
+    color: #005cc5 !important;
+    font-weight: 600 !important;
+  }
+  
+  .vcl-number {
+    color: #005cc5 !important;
+  }
+  
+  /* Code inside pre blocks */
+  .cuf-body pre code,
+  [class*="emailBody"] pre code,
+  .feeditemtext pre code,
+  .slds-rich-text-editor__output pre code {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    color: inherit !important;
+    font-size: 1.1em !important;
+    white-space: pre !important;
+  }
+  
+  /* Scrollbar styling for code blocks */
+  .cuf-body pre::-webkit-scrollbar,
+  [class*="emailBody"] pre::-webkit-scrollbar,
+  .feeditemtext pre::-webkit-scrollbar,
+  .slds-rich-text-editor__output pre::-webkit-scrollbar {
+    height: 8px !important;
+  }
+  
+  .cuf-body pre::-webkit-scrollbar-track,
+  [class*="emailBody"] pre::-webkit-scrollbar-track,
+  .feeditemtext pre::-webkit-scrollbar-track,
+  .slds-rich-text-editor__output pre::-webkit-scrollbar-track {
+    background: #f0f0f0 !important;
+    border-radius: 4px !important;
+  }
+  
+  .cuf-body pre::-webkit-scrollbar-thumb,
+  [class*="emailBody"] pre::-webkit-scrollbar-thumb,
+  .feeditemtext pre::-webkit-scrollbar-thumb,
+  .slds-rich-text-editor__output pre::-webkit-scrollbar-thumb {
+    background: #c1c1c1 !important;
+    border-radius: 4px !important;
+  }
+  
+  .cuf-body pre::-webkit-scrollbar-thumb:hover,
+  [class*="emailBody"] pre::-webkit-scrollbar-thumb:hover,
+  .feeditemtext pre::-webkit-scrollbar-thumb:hover,
+  .slds-rich-text-editor__output pre::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8 !important;
+  }
+  
+  /* Links in email bodies */
+  .cuf-body a,
+  [class*="emailBody"] a {
+    color: #1976D2 !important;
+    text-decoration: none !important;
+    border-bottom: 1px solid transparent !important;
+    transition: all 0.2s ease !important;
+  }
+  
+  .cuf-body a:hover,
+  [class*="emailBody"] a:hover {
+    color: #1565C0 !important;
+    border-bottom-color: #1565C0 !important;
+  }
+  
+  /* Feed item text */
+  .feeditemtext,
+  [class*="feedItemText"] {
+    font-size: 14.5px !important;
+    line-height: 1.65 !important;
+    color: #333 !important;
+  }
+  
+  /* Case subject and titles */
+  h1.slds-page-header__title,
+  .slds-page-header__title,
+  [class*="caseTitle"] {
+    font-size: 1.3rem !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.02em !important;
+    color: #1a1a1a !important;
+  }
+  
+  /* Section headers */
+  h2.slds-text-heading_medium,
+  h3.slds-text-heading_small,
+  .slds-card__header-title {
+    font-weight: 600 !important;
+    letter-spacing: -0.01em !important;
+    color: #2c3e50 !important;
+  }
+  
+  /* Form labels */
+  label.slds-form-element__label,
+  .slds-form-element__label {
+    font-weight: 500 !important;
+    font-size: 0.875rem !important;
+    color: #495057 !important;
+    letter-spacing: 0.01em !important;
+  }
+  
+  /* Input text */
+  input.slds-input,
+  textarea.slds-textarea,
+  .slds-input,
+  .slds-textarea {
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    color: #2c3e50 !important;
+  }
+  
+  /* Table text */
+  .slds-table td,
+  .slds-table th {
+    font-size: 13.5px !important;
+    line-height: 1.5 !important;
+  }
+  
+  /* Button text */
+  button,
+  .slds-button {
+    font-weight: 500 !important;
+    letter-spacing: 0.02em !important;
+  }
+  
+  /* Timestamps and metadata */
+  .slds-text-body_small,
+  [class*="timestamp"],
+  [class*="metadata"],
+  time {
+    font-size: 12.5px !important;
+    color: #6c757d !important;
+    font-weight: 400 !important;
+  }
+  
+  /* Bold text enhancement */
+  strong, b {
+    font-weight: 600 !important;
+  }
+  
+  /* Blockquotes */
+  blockquote {
+    border-left: 2px solid #87929d !important;
+    padding-left: 1em !important;
+    margin: 1em 0 !important;
+    color: #495057 !important;
+    font-style: italic !important;
+  }
+  
+  
+  }
+}
+
+@-moz-document regexp("^https:\\/\\/.*\\.lightning\\.force\\.com\\/.*$") {
+/* ==================== GENERAL ENHANCEMENTS ==================== */
+
+
+  
+  /* Smooth scrolling */
+  * {
+    scroll-behavior: smooth !important;
+  }
+  
+  /* Button enhancements */
+  button, .slds-button {
+    transition: all 0.2s ease !important;
+  }
+  
+  button:hover, .slds-button:hover {
+    transform: translateY(-1px) !important;
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important; */
+  }
+  
+  button:active, .slds-button:active {
+    transform: translateY(0) !important;
+  }
+  
+  /* Focus states for accessibility */
+  button:focus, 
+  .slds-button:focus,
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: 2px solid #1976D2 !important;
+    outline-offset: 2px !important;
+  }
+  
+  /* Card enhancements */
+  .slds-card {
+    border-radius: 8px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+    transition: box-shadow 0.2s ease !important;
+  }
+}
