@@ -10,11 +10,12 @@
 
 @preprocessor stylus
 
-@var checkbox emailDiff     'Email differentiation badges' 1
-@var checkbox systemHidden  'Hide system update bodies' 0
-@var checkbox compactMode   'Compact system updates' 1
-@var checkbox typography    'Enhanced typography' 1
-@var checkbox animations    'Enable animations' 1
+@var checkbox emailDiff      'Email differentiation badges' 1
+@var checkbox systemHidden   'Hide system update bodies' 0
+@var checkbox compactMode    'Compact system updates' 1
+@var checkbox typography     'Enhanced typography' 1
+@var checkbox animations     'Enable animations' 1
+@var checkbox stickySidebar  'Sticky sidebar while scrolling' 1
 ==/UserStyle== */
 
 @-moz-document regexp("^https:\\/\\/.*\\.lightning\\.force\\.com\\/email\\/htmlbody.*$") {
@@ -51,6 +52,53 @@
   #rightColumn-57, [id^="rightColumn-"], .col.right-col.slds-col { 
     flex: 0 0 18% !important;
     transition: flex 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+  
+  if stickySidebar {
+    /* Sticky sidebar that stays on screen while scrolling */
+    .region-sidebar-right, 
+    #rightColumn-57, 
+    [id^="rightColumn-"], 
+    .col.right-col.slds-col {
+      position: sticky !important;
+      top: 140px !important;
+      max-height: calc(100vh - 40px) !important;
+      overflow-y: auto !important;
+      align-self: flex-start !important;
+      /* Smooth scrolling within sidebar */
+      scrollbar-width: thin !important;
+      scrollbar-color: rgba(255, 255, 255, 0.3) transparent !important;
+    }
+    
+    /* Custom scrollbar styling for webkit browsers */
+    .region-sidebar-right::-webkit-scrollbar,
+    #rightColumn-57::-webkit-scrollbar,
+    [id^="rightColumn-"]::-webkit-scrollbar,
+    .col.right-col.slds-col::-webkit-scrollbar {
+      width: 6px !important;
+    }
+    
+    .region-sidebar-right::-webkit-scrollbar-track,
+    #rightColumn-57::-webkit-scrollbar-track,
+    [id^="rightColumn-"]::-webkit-scrollbar-track,
+    .col.right-col.slds-col::-webkit-scrollbar-track {
+      background: transparent !important;
+    }
+    
+    .region-sidebar-right::-webkit-scrollbar-thumb,
+    #rightColumn-57::-webkit-scrollbar-thumb,
+    [id^="rightColumn-"]::-webkit-scrollbar-thumb,
+    .col.right-col.slds-col::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3) !important;
+      border-radius: 3px !important;
+    }
+    
+    .region-sidebar-right::-webkit-scrollbar-thumb:hover,
+    #rightColumn-57::-webkit-scrollbar-thumb:hover,
+    [id^="rightColumn-"]::-webkit-scrollbar-thumb:hover,
+    .col.right-col.slds-col::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.5) !important;
+    }
   }
   
   
@@ -480,31 +528,6 @@
     height: 100%;
     background: linear-gradient(to bottom, #1976D2, #0D47A1) !important;
     z-index: 1;
-  }
-  
-  /* Zendesk-style avatars - circular and clean */
-  [data-type="TextPost"] .entity-photo,
-  [data-type="LinkPost"] .entity-photo,
-  [data-type="CaseCommentPost"] .entity-photo,
-  [data-type="TextPost"] img[alt],
-  [data-type="LinkPost"] img[alt],
-  [data-type="CaseCommentPost"] img[alt] {
-    border-radius: 50% !important;
-    border: 2px solid #f8f9f9 !important;
-    width: 32px !important;
-    height: 32px !important;
-  }
-  
-  
-  
-  
-  /* Timestamps - subtle gray like Zendesk */
-  [data-type="TextPost"] .compactTimeStamp,
-  [data-type="LinkPost"] .compactTimeStamp,
-  [data-type="CaseCommentPost"] .compactTimeStamp {
-    color: #68737d !important;
-    font-size: 12px !important;
-    font-weight: 400 !important;
   }
   
   /* Message content - clean and readable */
