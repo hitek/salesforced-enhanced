@@ -295,6 +295,9 @@ SOFTWARE.
 - ⚙️ Configurable options via Stylus
 - 🎨 Modern UI with smooth animations
 
+- ### Version 0.1.1
+- Added a sticky sidebar
+
 ---
 
 <div align="center">
