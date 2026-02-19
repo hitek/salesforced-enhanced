@@ -298,6 +298,13 @@ SOFTWARE.
 - ### Version 0.1.1
 - Added a sticky sidebar
 
+- - ### Version 0.1.2
+- Changed the ticket updates background to a less vibrant blue
+- Removed background color gradients
+
+- ### Version 0.1.3
+- Added new response badges to indicate EXTERNAL when the response is not from internal support or a customer.
+
 ---
 
 <div align="center">
