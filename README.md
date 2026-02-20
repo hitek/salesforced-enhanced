@@ -305,6 +305,9 @@ SOFTWARE.
 - ### Version 0.1.3
 - Added new response badges to indicate EXTERNAL when the response is not from internal support or a customer.
 
+- ### Version 0.1.4
+- Fixed up image and text overflow issues. Fixed images and text to not go over the size of the main message area.
+
 ---
 
 <div align="center">
